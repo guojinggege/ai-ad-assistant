@@ -309,8 +309,12 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`AI 广告助手已启动: http://localhost:${PORT}`);
-  console.log(`auth.json 状态: ${authExists() ? '已就绪' : '未保存（请先点击\"保存登录态\"）'}`);
-  console.log(`OpenAI Key: ${process.env.OPENAI_API_KEY ? '已配置' : '未配置 —— 将使用本地规则解析'}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`AI 广告助手已启动: http://localhost:${PORT}`);
+    console.log(`auth.json 状态: ${authExists() ? '已就绪' : '未保存（请先点击\"保存登录态\"）'}`);
+    console.log(`OpenAI Key: ${process.env.OPENAI_API_KEY ? '已配置' : '未配置 —— 将使用本地规则解析'}`);
+  });
+}
+
+module.exports = app;
