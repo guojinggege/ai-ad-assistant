@@ -5,5 +5,8 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/api/index.js" }
-  ]
+  ],
+  "env": {
+    "OPENAI_MODEL": "gpt-4o-mini"
+  }
 }
