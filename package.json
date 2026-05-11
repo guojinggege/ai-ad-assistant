@@ -1,0 +1,27 @@
+{
+  "name": "ad-assistant",
+  "version": "1.0.0",
+  "description": "对话式 AI 广告管理助手 —— 用一句话操作广告后台（Express + Playwright）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "login": "node scripts/login.js",
+    "create": "node scripts/createAd.js",
+    "delete": "node scripts/deleteAd.js",
+    "sort": "node scripts/sortAd.js",
+    "replace": "node scripts/replaceLinks.js",
+    "toggle": "node scripts/batchToggle.js"
+  },
+  "keywords": ["playwright", "express", "openai", "ad-management", "automation"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "openai": "^6.37.0",
+    "playwright": "^1.59.1"
+  }
+}

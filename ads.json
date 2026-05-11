@@ -1,0 +1,18 @@
+[
+    {
+      "name": "澳门空降",
+      "url": "https://xx.vip",
+      "client": "顺丰-客户",
+      "type": "播放器",
+      "mode": "CPS",
+      "googleCode": "123456"
+    },
+    {
+      "name": "永利皇宫",
+      "url": "https://yy.vip",
+      "client": "景鸿-客户",
+      "type": "BC",
+      "mode": "CPA",
+      "googleCode": "456789"
+    }
+  ]

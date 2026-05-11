@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 广告运营平台</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-mark">AI</div>
+        <div>
+          <div class="brand-title">广告运营平台</div>
+          <div class="brand-subtitle">智能广告后台</div>
+        </div>
+      </div>
+
+      <nav class="nav-list" id="navList">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">🏠</span>控制台</button>
+        <button class="nav-item" data-view="ads"><span class="nav-icon">🗂️</span>广告管理</button>
+        <button class="nav-item" data-view="slots"><span class="nav-icon">📌</span>广告位管理</button>
+        <button class="nav-item" data-view="media"><span class="nav-icon">🖼️</span>素材中心</button>
+        <button class="nav-item" data-view="tasks"><span class="nav-icon">⚙️</span>批量任务</button>
+        <button class="nav-item" data-view="assistant"><span class="nav-icon">🤖</span>AI助手</button>
+        <button class="nav-item" data-view="logs"><span class="nav-icon">📋</span>执行日志</button>
+        <button class="nav-item" data-view="account"><span class="nav-icon">👤</span>账号状态</button>
+        <button class="nav-item" data-view="settings"><span class="nav-icon">⚙️</span>设置</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="footer-label">运行端口</div>
+        <div class="footer-value">localhost:3100</div>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="top-left">
+          <div class="page-title" id="pageTitle">控制台</div>
+          <div class="page-desc">为广告运营人员打造的 AI 自动化运营后台。</div>
+        </div>
+        <div class="page-actions">
+          <button id="btnStatusReload" class="action-button">刷新状态</button>
+          <button id="btnLogin" class="action-button primary">登录后台</button>
+          <button id="btnClearLogs" class="action-button">清空日志</button>
+        </div>
+      </header>
+
+      <section class="page-content">
+        <div id="dashboardView" class="view active">
+          <div class="cards-grid" id="dashboardCards"></div>
+          <div class="grid-panel">
+            <div class="panel-card dashboard-chart">
+              <div class="panel-header"><span>执行趋势</span></div>
+              <div class="chart-line" id="trendChart"></div>
+            </div>
+            <div class="panel-card dashboard-chart">
+              <div class="panel-header"><span>广告状态分布</span></div>
+              <div class="chart-pie" id="pieChart"></div>
+            </div>
+          </div>
+          <div class="grid-panel">
+            <div class="panel-card full">
+              <div class="panel-header"><span>最近执行记录</span></div>
+              <div class="table-scroll"><table class="table" id="recentExecutionsTable"><thead><tr><th>任务</th><th>状态</th><th>时间</th></tr></thead><tbody></tbody></table></div>
+            </div>
+            <div class="panel-card full">
+              <div class="panel-header"><span>最近失败任务</span></div>
+              <div class="table-scroll"><table class="table" id="failedTasksTable"><thead><tr><th>任务</th><th>原因</th><th>时间</th></tr></thead><tbody></tbody></table></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="adsView" class="view">
+          <div class="list-toolbar">
+            <div>
+              <input id="adsSearch" class="input" placeholder="搜索广告名称或链接" />
+              <select id="adsStatusFilter" class="select"><option value="">全部状态</option><option value="online">上架</option><option value="offline">下架</option></select>
+              <select id="adsSlotFilter" class="select"><option value="">全部广告位</option></select>
+            </div>
+            <div>
+              <button id="btnNewAd" class="action-button primary">新建广告</button>
+            </div>
+          </div>
+          <div class="table-scroll"><table class="table" id="adsTable"><thead><tr><th>名称</th><th>状态</th><th>广告位</th><th>链接</th><th>验证码</th><th>创建时间</th><th>更新时间</th><th>排序</th><th>操作</th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <div id="slotsView" class="view">
+          <div class="list-toolbar">
+            <div>
+              <button id="btnNewSlot" class="action-button primary">新建广告位</button>
+            </div>
+          </div>
+          <div class="slot-grid" id="slotGrid"></div>
+        </div>
+
+        <div id="mediaView" class="view">
+          <div class="panel-card upload-panel">
+            <div class="panel-header"><span>素材上传</span></div>
+            <div class="upload-dropzone" id="uploadDropzone">
+              <div>拖拽图片或视频到此处，或点击选择文件</div>
+              <input type="file" id="mediaFileInput" multiple accept="image/*,video/*" />
+            </div>
+          </div>
+          <div class="media-grid" id="mediaGrid"></div>
+        </div>
+
+        <div id="tasksView" class="view">
+          <div class="panel-card full">
+            <div class="panel-header"><span>任务执行状态</span></div>
+            <div class="table-scroll"><table class="table" id="tasksTable"><thead><tr><th>任务名称</th><th>类型</th><th>状态</th><th>进度</th><th>开始</th><th>完成</th></tr></thead><tbody></tbody></table></div>
+          </div>
+        </div>
+
+        <div id="assistantView" class="view">
+          <div class="assistant-grid">
+            <div class="assistant-panel">
+              <div class="panel-header"><span>AI 助手</span></div>
+              <div class="messages" id="messages">
+                <div class="msg assistant">
+                  <div class="bubble">你好，我是广告助手。你可以直接输入 AI 指令来上架/下架广告，替换链接，上传素材，分配广告位。</div>
+                </div>
+              </div>
+              <form class="composer" id="composer">
+                <textarea id="input" rows="2" placeholder="输入指令，Enter 发送，Shift+Enter 换行..."></textarea>
+                <button type="submit" id="send" class="action-button primary">发送</button>
+              </form>
+            </div>
+            <div class="assistant-panel summary-panel">
+              <div class="panel-header"><span>助手状态</span></div>
+              <div class="status-card"><strong>当前登录</strong><p id="authStatus">正在检查...</p></div>
+              <div class="status-card"><strong>AI 模式</strong><p id="aiStatus">正在检查...</p></div>
+              <div class="status-card"><strong>最近错误</strong><p id="assistantError">无</p></div>
+              <div class="status-card"><strong>执行历史</strong><p id="assistantHistory">加载中...</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="logsView" class="view">
+          <div class="panel-card full">
+            <div class="panel-header"><span>实时执行日志</span></div>
+            <div class="table-scroll"><div class="log-inside" id="logPageList"></div></div>
+          </div>
+        </div>
+
+        <div id="accountView" class="view">
+          <div class="panel-card full">
+            <div class="panel-header"><span>账号 & 登录态</span></div>
+            <div class="account-grid">
+              <div class="status-card"><strong>后台登录态</strong><p id="accountAuth"></p></div>
+              <div class="status-card"><strong>OpenAI</strong><p id="accountAI"></p></div>
+              <div class="status-card"><strong>浏览器模式</strong><p id="accountHeadless"></p></div>
+              <div class="status-card"><strong>后台地址</strong><p id="accountAdminUrl"></p></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="settingsView" class="view">
+          <div class="panel-card full">
+            <div class="panel-header"><span>系统设置</span></div>
+            <div class="settings-grid">
+              <label>OpenAI Key<input id="inputOpenAI" class="input" placeholder="请输入 OpenAI API Key" /></label>
+              <label>Claude API<input id="inputClaude" class="input" placeholder="请输入 Claude API Key" /></label>
+              <label>后台地址<input id="inputAdminUrl" class="input" placeholder="广告后台登录地址" /></label>
+              <label>登录地址<input id="inputLoginUrl" class="input" placeholder="登录页地址" /></label>
+              <label>是否无头模式<select id="inputHeadless" class="select"><option value="false">否</option><option value="true">是</option></select></label>
+              <label>自动重试<input id="inputRetry" type="number" class="input" min="0" /></label>
+              <label>执行超时(s)<input id="inputTimeout" type="number" class="input" min="10" /></label>
+              <label>浏览器路径<input id="inputBrowserPath" class="input" placeholder="可选，指定 Chromium/Edge/Chrome 路径" /></label>
+            </div>
+            <div class="settings-actions">
+              <button id="btnSaveSettings" class="action-button primary">保存设置</button>
+              <button id="btnReloadSettings" class="action-button">刷新</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="side-panel">
+      <div class="panel-header">执行日志</div>
+      <div class="log-summary" id="logSummary">
+        <div><span>连接：</span><strong id="connState">检测中...</strong></div>
+        <div><span>消息：</span><strong id="logCount">0</strong></div>
+      </div>
+      <div class="log-stream" id="logs"></div>
+    </aside>
+  </div>
+
+  <div id="modalOverlay" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header"><span id="modalTitle">编辑</span><button id="modalClose">×</button></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
