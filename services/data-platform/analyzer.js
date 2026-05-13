@@ -145,7 +145,10 @@ function runQuery(meta, rows, spec) {
   }
 
   const out = [];
+  const isSelectStar = groupBy.length === 0 && aggregates.length === 0;
   for (const members of groups.values()) {
+    // SELECT * 路径：没分组也没聚合 → 直接展开过滤后的原始行
+    if (isSelectStar) { out.push(...members); continue; }
     const row = {};
     if (groupBy.length) {
       for (const g of groupBy) row[g] = members[0]?.[g] ?? null;
