@@ -318,3 +318,5 @@ if (require.main === module) {
 }
 
 module.exports = app;
+
+app.use('/api/data', require('./routes/dataPlatform'));
