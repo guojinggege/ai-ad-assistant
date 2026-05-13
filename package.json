@@ -13,7 +13,13 @@
     "replace": "node scripts/replaceLinks.js",
     "toggle": "node scripts/batchToggle.js"
   },
-  "keywords": ["playwright", "express", "openai", "ad-management", "automation"],
+  "keywords": [
+    "playwright",
+    "express",
+    "openai",
+    "ad-management",
+    "automation"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
@@ -21,9 +27,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "multer": "^1.4.5-lts.1",
     "openai": "^6.37.0",
     "playwright": "^1.59.1",
-    "xlsx": "^0.18.5",
-    "multer": "^1.4.5-lts.1"
+    "xlsx": "^0.18.5"
   }
 }
