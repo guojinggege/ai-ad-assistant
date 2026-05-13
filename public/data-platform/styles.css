@@ -1,0 +1,194 @@
+/* 数据分析模块独立样式
+   - 全部走现有 CSS 变量，带 fallback 兜底
+   - 所有选择器加 dp- 前缀避免污染全局 */
+
+#dataView { display: flex; flex-direction: column; gap: 16px; }
+
+.dp-toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; flex-wrap: wrap;
+}
+.dp-tabs { display: flex; gap: 6px; }
+.dp-tab {
+  padding: 8px 16px;
+  border: 1px solid var(--border, rgba(255,255,255,.12));
+  background: transparent;
+  color: var(--fg-2, #a3acba);
+  border-radius: 8px; cursor: pointer; font: inherit; font-size: 13px;
+  transition: all .15s;
+}
+.dp-tab:hover { color: var(--fg, #fff); }
+.dp-tab.active {
+  background: var(--accent, #10a37f);
+  border-color: var(--accent, #10a37f);
+  color: #fff;
+}
+
+.dp-panel { display: block; }
+.dp-panel.hidden { display: none; }
+
+/* dropzone */
+.dp-dropzone {
+  border: 2px dashed var(--border, rgba(255,255,255,.16));
+  border-radius: 12px; padding: 36px 20px;
+  text-align: center; color: var(--fg-2, #a3acba);
+  cursor: pointer; transition: all .15s;
+  margin-top: 12px;
+}
+.dp-dropzone:hover { border-color: var(--accent, #10a37f); color: var(--fg, #fff); }
+.dp-dropzone.dragover {
+  background: rgba(16,163,127,.08);
+  border-color: var(--accent, #10a37f);
+  color: var(--fg, #fff);
+}
+.dp-dropzone input[type=file] { display: none; }
+
+/* datasets table */
+.dp-datasets-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.dp-datasets-table th, .dp-datasets-table td {
+  padding: 10px 12px; text-align: left; font-size: 13px;
+  border-bottom: 1px solid var(--border, rgba(255,255,255,.08));
+}
+.dp-datasets-table th { color: var(--fg-2, #a3acba); font-weight: 500; }
+.dp-datasets-table td { color: var(--fg, #e6e8eb); }
+.dp-datasets-table .dp-row-actions { display: flex; gap: 6px; }
+
+/* KPI cards */
+.dp-kpi-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+.dp-kpi-card {
+  padding: 14px 16px; border-radius: 12px;
+  background: var(--bg-2, rgba(255,255,255,.04));
+  border: 1px solid var(--border, rgba(255,255,255,.08));
+}
+.dp-kpi-label { font-size: 12px; color: var(--fg-2, #a3acba); }
+.dp-kpi-value { font-size: 22px; font-weight: 600; color: var(--fg, #fff); margin-top: 6px; }
+
+/* charts */
+.dp-charts {
+  display: grid; gap: 14px;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 900px) {
+  .dp-charts { grid-template-columns: 1fr; }
+}
+.dp-chart-card {
+  background: var(--bg-2, rgba(255,255,255,.04));
+  border: 1px solid var(--border, rgba(255,255,255,.08));
+  border-radius: 12px; padding: 14px;
+  min-height: 220px;
+}
+.dp-chart-title {
+  font-size: 13px; color: var(--fg-2, #a3acba);
+  margin-bottom: 10px; font-weight: 500;
+}
+.dp-chart-svg { width: 100%; height: 200px; display: block; }
+
+/* hand-rolled bar chart (div-based, 与现有 trendChart 风格一致) */
+.dp-chart-bar {
+  display: flex; align-items: flex-end;
+  height: 180px; gap: 10px; padding-bottom: 28px; position: relative;
+}
+.dp-chart-bar > div {
+  flex: 1; min-width: 8px;
+  background: var(--accent, #10a37f);
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  position: relative;
+  cursor: default;
+  transition: opacity .15s;
+}
+.dp-chart-bar > div:hover { opacity: .8; }
+.dp-chart-bar > div::after {
+  content: attr(data-label);
+  position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--fg-2, #a3acba); white-space: nowrap;
+}
+
+/* pie legend */
+.dp-chart-legend { display: flex; flex-direction: column; gap: 6px; }
+.dp-chart-legend .item {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; color: var(--fg, #e6e8eb);
+}
+.dp-chart-legend .swatch {
+  width: 12px; height: 12px; border-radius: 3px;
+  margin-right: 8px; display: inline-block; vertical-align: -2px;
+}
+
+/* query builder */
+.dp-query-form { display: grid; gap: 10px; }
+.dp-query-row {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.dp-query-row select,
+.dp-query-row input[type="text"],
+.dp-query-row input[type="number"],
+.dp-query-row input:not([type]) {
+  background: var(--bg, rgba(255,255,255,.02));
+  border: 1px solid var(--border, rgba(255,255,255,.12));
+  border-radius: 6px; padding: 6px 10px;
+  color: var(--fg, #e6e8eb); font: inherit; font-size: 13px;
+}
+.dp-query-row select:focus,
+.dp-query-row input:focus { outline: 1px solid var(--accent, #10a37f); border-color: var(--accent, #10a37f); }
+.dp-query-row .btn-mini,
+button.btn-mini {
+  background: transparent; color: var(--fg-2, #a3acba);
+  border: 1px solid var(--border, rgba(255,255,255,.12));
+  border-radius: 6px;
+  padding: 5px 12px; cursor: pointer; font: inherit; font-size: 12px;
+}
+button.btn-mini:hover { color: var(--fg, #fff); border-color: var(--accent, #10a37f); }
+
+/* results table */
+.dp-results-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.dp-results-table th, .dp-results-table td {
+  padding: 8px 12px; text-align: left; font-size: 13px;
+  border-bottom: 1px solid var(--border, rgba(255,255,255,.08));
+}
+.dp-results-table th {
+  background: var(--bg-2, rgba(255,255,255,.04));
+  color: var(--fg-2, #a3acba);
+  font-weight: 500;
+  position: sticky; top: 0;
+}
+
+/* toast */
+.dp-toast {
+  position: fixed; top: 20px; right: 20px; z-index: 9999;
+  padding: 12px 18px; border-radius: 8px;
+  background: rgba(40, 44, 54, .96);
+  color: var(--fg, #fff);
+  border: 1px solid var(--border, rgba(255,255,255,.12));
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  font-size: 13px;
+  max-width: 360px;
+  animation: dp-fade-in .2s;
+}
+.dp-toast.error {
+  background: rgba(120, 30, 30, .96);
+  border-color: rgba(220,38,38,.5);
+}
+.dp-toast.success {
+  background: rgba(16,80,60,.96);
+  border-color: rgba(16,163,127,.5);
+}
+@keyframes dp-fade-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* misc */
+.dp-empty {
+  text-align: center; padding: 32px 16px;
+  color: var(--fg-2, #a3acba); font-size: 13px;
+}
+.dp-section-title {
+  font-size: 13px; color: var(--fg-2, #a3acba);
+  font-weight: 500; margin-top: 12px; margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+#dpCurrent { font-size: 13px; color: var(--fg-2, #a3acba); }

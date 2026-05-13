@@ -63,6 +63,7 @@ const PAGE_NAMES = {
   logs: '执行日志',
   account: '账号状态',
   settings: '设置',
+  data: '数据分析',
 };
 
 const state = {

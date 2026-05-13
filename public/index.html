@@ -27,6 +27,7 @@
         <button class="nav-item" data-view="logs"><span class="nav-icon">📋</span>执行日志</button>
         <button class="nav-item" data-view="account"><span class="nav-icon">👤</span>账号状态</button>
         <button class="nav-item" data-view="settings"><span class="nav-icon">⚙️</span>设置</button>
+        <button class="nav-item" data-view="data"><span class="nav-icon">📊</span>数据分析</button>
       </nav>
 
       <div class="sidebar-footer">
@@ -157,6 +158,8 @@
           </div>
         </div>
 
+        <section id="dataView" class="view"></section>
+
         <div id="settingsView" class="view">
           <div class="panel-card full">
             <div class="panel-header"><span>系统设置</span></div>
@@ -197,5 +200,6 @@
   </div>
 
   <script src="/app.js"></script>
+  <script src="/data-platform/index.js" defer></script>
 </body>
 </html>
