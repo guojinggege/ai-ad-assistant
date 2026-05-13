@@ -62,13 +62,13 @@ app.get('/api/dashboard', async (req, res) => {
     const successCount = tasks.filter((task) => task.status === 'success').length;
     const failCount = tasks.filter((task) => task.status === 'failed').length;
     const runningCount = tasks.filter((task) => task.status === 'running').length;
-    const createdToday = ads.filter((item) => item.createdAt.startsWith(today)).length;
-    const offlineToday = ads.filter((item) => item.status === 'offline' && item.updatedAt.startsWith(today)).length;
+    const createdToday = ads.filter((item) => (item.createdAt || '').startsWith(today)).length;
+    const offlineToday = ads.filter((item) => item.status === 'offline' && (item.updatedAt || '').startsWith(today)).length;
 
     res.json({
       metrics: {
-        todayCreated,
-        todayOffline,
+        todayCreated: createdToday,
+        todayOffline: offlineToday,
         onlineAds: ads.filter((item) => item.status === 'online').length,
         slotCount: slots.length,
         successRate: tasks.length ? Math.round((successCount / tasks.length) * 100) : 100,

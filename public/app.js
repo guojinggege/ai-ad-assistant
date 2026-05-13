@@ -137,9 +137,15 @@ function renderDashboard(data) {
 }
 
 async function loadDashboard() {
-  const res = await fetch('/api/dashboard');
-  const data = await res.json();
-  renderDashboard(data);
+  try {
+    const res = await fetch('/api/dashboard');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data || !data.metrics) throw new Error('响应缺少 metrics 字段');
+    renderDashboard(data);
+  } catch (e) {
+    addLogEntry('error', `Dashboard 加载失败: ${e.message}`);
+  }
 }
 
 async function loadAds() {
