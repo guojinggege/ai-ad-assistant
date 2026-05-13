@@ -2,7 +2,7 @@
    - 全部走现有 CSS 变量，带 fallback 兜底
    - 所有选择器加 dp- 前缀避免污染全局 */
 
-#dataView { display: flex; flex-direction: column; gap: 16px; }
+#dataView.active { display: flex; flex-direction: column; gap: 16px; }
 
 .dp-toolbar {
   display: flex; justify-content: space-between; align-items: center;
