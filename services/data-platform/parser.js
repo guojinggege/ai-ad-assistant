@@ -22,7 +22,10 @@ function isDateLike(v) {
   if (v instanceof Date) return !isNaN(v.getTime());
   if (typeof v !== 'string') return false;
   const t = v.trim();
-  if (!/\d{4}|\d{1,2}[\/\-]\d{1,2}/.test(t)) return false;
+  if (t === '') return false;
+  // 必须含日期/时间分隔符；否则 "1200"/"98.5" 会被 new Date 当成 year 1200 等
+  if (!/[-/:年月日]/.test(t)) return false;
+  if (!/\d{4}|\d{1,2}[\-/]\d{1,2}/.test(t)) return false;
   const d = new Date(t);
   return !isNaN(d.getTime());
 }
@@ -41,8 +44,9 @@ function inferType(samples) {
     if (v instanceof Date) { dates++; continue; }
     if (typeof v === 'number') { nums++; continue; }
     if (typeof v === 'boolean') { bools++; continue; }
-    if (isDateLike(v)) { dates++; continue; }
+    // number 优先于 date：纯数字一律先归数字，避免 "1200" 被 new Date 当成年份
     if (isNumberLike(v)) { nums++; continue; }
+    if (isDateLike(v)) { dates++; continue; }
     if (isBoolLike(v)) { bools++; continue; }
     strs++;
   }
@@ -119,13 +123,23 @@ function parseBuffer(buffer, ext) {
     throw new Error('parser 需要 Buffer 输入');
   }
   const e = String(ext || '').toLowerCase();
-  const opts = { type: 'buffer', cellDates: true, raw: false };
-  // 中文 .xls 旧格式：codepage:936（GBK）
-  if (e === '.xls') opts.codepage = 936;
+
+  // CSV 单独走 string 入口：xlsx 读 CSV 默认按 cp1252 解码 UTF-8 字节会乱码
+  let input, opts;
+  if (e === '.csv') {
+    let s = buffer.toString('utf8');
+    if (s.charCodeAt(0) === 0xFEFF) s = s.slice(1); // 剥 UTF-8 BOM
+    input = s;
+    opts = { type: 'string', cellDates: true, raw: false };
+  } else {
+    input = buffer;
+    opts = { type: 'buffer', cellDates: true, raw: false };
+    if (e === '.xls') opts.codepage = 936; // 中文 .xls 旧格式（GBK）
+  }
 
   let wb;
   try {
-    wb = XLSX.read(buffer, opts);
+    wb = XLSX.read(input, opts);
   } catch (e2) {
     throw new Error(`xlsx 解析失败: ${e2.message}`);
   }
