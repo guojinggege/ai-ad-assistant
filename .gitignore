@@ -12,3 +12,12 @@ logs/
 coverage/
 .idea/
 .vercel
+
+# data-platform 运行时存储（含上传文件 + 解析结果），见 services/data-platform/store.js
+storage/data/
+
+# services/{slots,tasks,upload,settings}.js 的运行时状态文件（首次请求时自动创建）
+/media.json
+/settings.json
+/slots.json
+/tasks.json
