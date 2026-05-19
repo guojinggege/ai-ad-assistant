@@ -18,9 +18,15 @@ async function ensureStore() {
 }
 
 async function loadMedia() {
-  await ensureStore();
-  const raw = await fs.readFile(META_PATH, 'utf8');
-  return JSON.parse(raw || '[]');
+  try {
+    await ensureStore();
+    const raw = await fs.readFile(META_PATH, 'utf8');
+    const parsed = JSON.parse(raw || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.warn('[media] loadMedia fallback to []:', err.message);
+    return [];
+  }
 }
 
 async function saveMedia(items) {

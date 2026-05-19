@@ -23,9 +23,17 @@ async function ensureStore() {
 }
 
 async function loadSettings() {
-  await ensureStore();
-  const raw = await fs.readFile(SETTINGS_PATH, 'utf8');
-  return JSON.parse(raw || '{}');
+  try {
+    await ensureStore();
+    const raw = await fs.readFile(SETTINGS_PATH, 'utf8');
+    const parsed = JSON.parse(raw || '{}');
+    return (parsed && typeof parsed === 'object' && !Array.isArray(parsed))
+      ? parsed
+      : {};
+  } catch (err) {
+    console.warn('[settings] loadSettings fallback to {}:', err.message);
+    return {};
+  }
 }
 
 async function saveSettings(next) {

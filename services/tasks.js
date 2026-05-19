@@ -37,9 +37,15 @@ async function ensureStore() {
 }
 
 async function loadTasks() {
-  await ensureStore();
-  const raw = await fs.readFile(TASK_PATH, 'utf8');
-  return JSON.parse(raw || '[]');
+  try {
+    await ensureStore();
+    const raw = await fs.readFile(TASK_PATH, 'utf8');
+    const parsed = JSON.parse(raw || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.warn('[tasks] loadTasks fallback to []:', err.message);
+    return [];
+  }
 }
 
 async function saveTasks(items) {
